@@ -47,7 +47,7 @@ First lets understand some terms that will be helpful for this challenge and the
 - A [fallback function](https://www.geeksforgeeks.org/solidity-fall-back-function/) on a solidity smart contract is a function that has no name, is public and can not have any parameters. Its executed when there is a function identifier doesn't exists or the parameters are not specified for a certain function. It basically the goes to the fallback function. The fallback function was mainly used to get money into the smart contract, however the suggested way for a smart contract to receive money today is via the receive function. 
 - [Solidity modifiers](https://docs.soliditylang.org/en/v0.8.13/contracts.html#function-modifiers) are used to check a condition before executing a function. The onlyOwner modifier is a frequently used modifier for functions that only the owner of the contract should be able to execute, such as for withdrawing funds from a contract. 
 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0; // specify the version of solidity for the compiler 
 
@@ -169,7 +169,7 @@ Key terms
 - [Blockhash()](https://docs.soliditylang.org/en/v0.8.15/units-and-global-variables.html): its a global function in solidity that returns the hash of a given block. 
 - Block.number: global variable that returns the current block number
 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -222,7 +222,7 @@ The security vulnerability is in the flip function. The random number is being g
 1. Copy and paste the smart contract to Remix. 
 2. Create a new smart contract on Remix, this will be the attacker smart contract.
 3. Here's the code for the guesser contract. I have added comments to explain whats going on. 
- ```
+ ```solidity
  // SPDX-License-Identifier: MIT
  pragma solidity ^0.6.0;
 
@@ -290,7 +290,7 @@ Bottom line: do no use tx.origin for authorization. makes the smart contract vul
 #### Solution: 
 1. Create a new smart contract on Remix. Deploy the telephone contract.;
 2. create new telephoneHack solidity file. 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 import './Telephone.sol';
@@ -331,7 +331,7 @@ Let's start by covering some terms and looking at the smart contract.
 - Uint: unsigned integer 256. 
 - SafeMath Library: its the safe way to perform aritmetic operations that prevents the overflow/underflow errors. 
 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -395,7 +395,7 @@ First some key terms and then lets dig into the smart contract (there actually a
 - Method Ids:
 - Fallback methods:
 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -477,7 +477,8 @@ ADD_SCREENSHOT
 
 #### Solution: 
 1. On Remix create a new contract. This contract will selfdestruct and before doing so it will send all the funds to our Force contract. 
-```
+
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -510,7 +511,7 @@ Here are the key terms and the smart contract.
 - Storage: when a smart contract gets deployed it gets a certain amount of storage. Storage is slipt into slots and the variables are put into slots. Everything is stored in binary.  
 - Private variables: private variables can only be accessed within that contracts code. No other contract code can get access to it, but we can read it. Blockchains are not for confidential data.  
 
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -587,8 +588,7 @@ First some key notes and then the contract:
 
 - Now important to note that when you are making a transaction to another smart contract you should have an error handling mechanism. If the smart contract you are making a call to fails than you transaction will not pass. 
 
-
-```
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
@@ -625,7 +625,8 @@ to hack the contract no one should be able to call "king.transfer(msg.value);"
 3. here is how the contract should be, have a look at the comments for whats going on. 
 -our contract will become the king, then when someone else wants to become king we are not going to allow them to transfer the ownership 
 - we can just not put a fallback function on our contract and then noone can reclaim ownership 
-```
+
+```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
 
