@@ -15,22 +15,30 @@ Sections:
  - [Force](#7-force)
  - [Valut](#8-valut)
  - [King](#9-king)
+
 ----
 
-#### Prerequisites:
-1. Connect to your MetaMask wallet
-2. Have some Rinkeby Testnet ETH
-3. Open your Console on Google Developer Tools 
+## Getting Started 
+
+To play the Ethernaut Game there are some steps to do at each level. Here are the Prerequisites and the Steps to setup the levels. 
+
+#### Tools & Prerequisites:
+1. [MetaMask](https://metamask.io/) Wallet
+2. Rinkeby Testnet ETH: You can get some from the [Rinkeby](https://rinkebyfaucet.com/) or [Paradigm](https://faucet.paradigm.xyz/) faucets. 
+3. Console on Google Developer Tools 
+4. [Remix](https://remix.ethereum.org/): Online Ethereum IDE
 
 #### Steps:
-1. On each challenge you'll need to click "get a new instance." You'll need to approve the popup on your MetaMask and pay for the transaction cost.  This will deploy a smart contract. 
+1. Connect your wallet to the Ethernaut website. 
+
+2. On each challenge you'll need to click "Get a New Instance." You'll need to approve the popup on your MetaMask and pay a transaction fee.  This button will deploy a smart contract. 
 
 * You will not become the owner of the smart contract, instead an Ethernout account will. 
 ![Screen Shot 2022-07-11 at 22.18.36.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1657567121788/Ni6cwn58e.png align="left")
 
-2. Open the google developer console, you'll be interacting with the contact from over here. 
+3. Open the Google Developer Tools Console. This is how to interact with the smart contract. 
 
-3. On some challenges you'll need to deploy a smart contract. You can deploy one on Remix without any setup and easily make function calls to it. 
+4. On some challenges you'll need to deploy a smart contract. You can deploy one on [Remix](https://remix.ethereum.org/) without any additional setup. On Remix select "Injected web3" when deploying the smart contract to deploy from your Metamask. 
  
 ---
 
@@ -649,5 +657,3 @@ await contract._king() // get the current king
 6. check who is the king 
 await contract._king() // get the king
 
-----
-NOTE: Injected web3 on remix 
