@@ -1,4 +1,18 @@
 # Ethernaut Game
+----
+
+Sections:
+ - [Prerequisites](#prerequisites)
+ - [Fallback](#1-fallback)
+ - [Fallout](#2-fallout)
+ - [Coin Flip](#3-coin-flip)
+ - [Telephone](#4-telephone)
+ - [Token](#5-token)
+ - [Delegation](#6-delegation)
+ - [Force](#7-force)
+ - [Valut](#8-valut)
+ - [King](#9-king)
+----
 
 #### Prerequisites:
 1. Connect to your MetaMask wallet
