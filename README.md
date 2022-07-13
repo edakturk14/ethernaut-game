@@ -1,4 +1,7 @@
 # Ethernaut Game
+
+👩‍🚀 I'm completing [The Ethernaut](https://ethernaut.openzeppelin.com/) Game! 
+
 ----
 
 Sections:
