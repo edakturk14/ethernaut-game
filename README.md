@@ -753,7 +753,7 @@ contract ReentranceAttack {
 - make sure to update the state variable before you make a function call to an external contract. this is also called as "checks and effects best practice on solidity."
 - mutex: puts a lock on a contract state and then only the owner can unlock. this ensures that only a signle funtion is execute at the same time. (have a modifer that checks if the contract is locked or not. locked meaning that theres a function call thats curently executing.) this way someone can not call the function recursively while the function is already executing. heres how the code looks like:
 
-```
+```solidity
 bool internal locked;
 
 // add this modifier to the withdraw func
