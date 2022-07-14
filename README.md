@@ -579,7 +579,6 @@ contract.unlock(pwd)
 await contract.locked()
 ``` 
 ---
-
 ### 9. King  
 
 > When you submit the instance back to the level, the level is going to reclaim kingship. You will beat the level if you can avoid such a self proclamation.
@@ -628,6 +627,7 @@ contract King {
 to hack the contract no one should be able to call "king.transfer(msg.value);"
 
 #### Solution: 
+
 1. we'll create a new smart contract on Remix.
 2. create a new solidity file attackking.sol 
 3. here is how the contract should be, have a look at the comments for whats going on. 
@@ -649,6 +649,7 @@ contract AttackKing {
 
 }
 ``` 
+
 The transfer function will not work on this smart contract. You shouldn't assume that the smart contract you make a function call to will have its error handling or a fallback function by default. 
 4. check the prize value in the contract. we need to put more money than the curent price amaount. 
 await contract.prize() // in gwei
@@ -657,3 +658,4 @@ await contract._king() // get the current king
 6. check who is the king 
 await contract._king() // get the king
 
+---
