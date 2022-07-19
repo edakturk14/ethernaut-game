@@ -18,6 +18,8 @@ Sections:
  - [Re-entrancy](#10-re-entrancy)
  - [Elevator](#11-elevator)
  - [Privacy](#12-privacy)
+ - [Gatekeeper One](#13-gatekeeper-one)
+ - [Gatekeeper Two](#14-gatekeeper-two)
 
 ----
 
@@ -956,9 +958,33 @@ await contract.locked()
 Lesson learned: if you store data on the blockchain its viewable by everybody. nothing is ever private on a blockchain. the way you declare the varaiable defines how much storage space it will take up. 
 
 ---
+### 13. Gatekeeper One 
+
+> Make it past the gatekeeper and register as an entrant to pass this level. 
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+``` 
+####  Solution:
+
+---
+### 14. Gatekeeper Two 
+
+> Make it past the gatekeeper and register as an entrant to pass this level. 
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+``` 
+####  Solution:
+
+---
 ### 13. NAME 
 
-> Challange 
+> challenge
 
 ```solidity
 // SPDX-License-Identifier: MIT
