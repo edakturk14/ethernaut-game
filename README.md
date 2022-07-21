@@ -20,7 +20,8 @@ Sections:
  - [Privacy](#12-privacy)
  - [Gatekeeper One](#13-gatekeeper-one)
  - [Gatekeeper Two](#14-gatekeeper-two)
-
+ - [Naught Coin](#15-naught-coin)
+ - [Preservation](#16-preservation)
 ----
 
 ## Getting Started 
@@ -1039,9 +1040,22 @@ contract GatekeeperTwoAttack {
 contract.address 
 
 ---
-### 15. NAME 
+### 15. Naught Coin 
 
-> challenge
+> NaughtCoin is an ERC20 token and you're already holding all of them. The catch is that you'll only be able to transfer them after a 10 year lockout period. Can you figure out how to get them out to another address so that you can transfer them freely? Complete this level by getting your token balance to 0.
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+``` 
+####  Solution:
+
+---
+
+### 16. Preservation 
+
+> The goal of this level is for you to claim ownership of the instance you are given.
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -1054,7 +1068,7 @@ pragma solidity ^0.6.0;
 
 ### 16. NAME 
 
-> challenge
+> desc
 
 ```solidity
 // SPDX-License-Identifier: MIT
