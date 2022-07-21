@@ -962,12 +962,33 @@ Lesson learned: if you store data on the blockchain its viewable by everybody. n
 
 > Make it past the gatekeeper and register as an entrant to pass this level. 
 
-```solidity
-// SPDX-License-Identifier: MIT
-pragma solidity ^0.6.0;
+Let's first review the tips that are given to us in the challeneg:
+- special function gasleft(). (Note: you can play around with the gas settings in the complier settings tab and see what is changed.)
+- tx.origin vs. msg.sender: this was covered in the previous telephone challange. Remember that only wallet addresses can be tx.origin (they are an EOA account). On the other hand, msg.sender can be both a wallet address and a user address. Msg.sender is typically who you want to authenticate. 
+- Date type conversions: when you convert a data type which uses a large storage to a smaller one you will loose the space it takes up. This means that the data will be lost or corrupt. 
 
-``` 
 ####  Solution:
+1. To pass GateOne we will create contract to be a middleman. Create a contract called GateHack.sol with the following:
+contract Hack {
+    GatekeeperOne gate = GatekeeperOne(//YOUR ADDR);
+    ...
+}
+2. To pass Gate3 we will use the data conversion. Bascially it needs to fullfill: bytes8 key = bytes8(tx.origin) & 0xFFFFFFFF0000FFFF;
+3. To pass Gate2 the gas multiplier needs to be a multiplier of 8191. In order to pass we need to calculate the gas. Look at the compiler version & settings on Etherscan. 
+The contract was compiled with:
+- version v0.4.18  
+- no optimization enabled
+4. Create a function to allocate a specified amount of gas. 
+function hackGate() public {
+    gate.call.gas(99999)(bytes4(keccak256('enter(bytes8)')), key);
+}
+
+
+Bottom lines:
+- Do not use tx.origin as an authorization check!!
+- Be careful with data conversions and corruptions 
+- Save gas by not storing unnecassry variables and doing less operations 
+- Different complier settings yield different gas so be careful with using it to make checks. 
 
 ---
 ### 14. Gatekeeper Two 
