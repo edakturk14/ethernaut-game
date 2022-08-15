@@ -304,6 +304,7 @@ Bottom line: do no use tx.origin for authorization. makes the smart contract vul
 #### Solution: 
 1. Create a new smart contract on Remix. Deploy the telephone contract.;
 2. create new telephoneHack solidity file. 
+
 ```solidity
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.6.0;
@@ -322,6 +323,7 @@ contract TelephoneHack {
   }
 }
 ``` 
+
 3. get the contract.address
 4. deploy with the contract.address 
 5. await contract.owner()
@@ -329,6 +331,7 @@ contract TelephoneHack {
 7. await contract.owner()
 
 *basically we made a transaction from the smart contract as the tx.origin. 
+
 ---
 
 ### 5. Token 
