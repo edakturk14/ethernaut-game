@@ -299,7 +299,7 @@ contract
 contract.abi
 await contract.owner() --> look at who the owner is
 
-Bottom line: do no use tx.origin for authorization. makes the smart contract vulnerable to a phising attack. The attacker can trick someone into starting the transaction. 
+Bottom line: Do NOT use **tx.origin** for authorization! This makes the smart contract vulnerable to phishing attacks since the attacker can trick someone into starting the transaction. You can read more on the security considerations page over [here.](https://docs.soliditylang.org/en/v0.8.16/security-considerations.html?highlight=tx.origin#tx-origin)
 
 #### Solution: 
 1. Create a new smart contract on Remix. Deploy the telephone contract.;
