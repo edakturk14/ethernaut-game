@@ -37,10 +37,7 @@ To play the Ethernaut Game there are some steps to do at each level. Here are th
 #### Steps:
 1. Connect your wallet to the Ethernaut website. 
 
-2. On each challenge you'll need to click "Get a New Instance." You'll need to approve the popup on your MetaMask and pay a transaction fee.  This button will deploy a smart contract. 
-
-* You will not become the owner of the smart contract, instead an Ethernout account will. 
-![Screen Shot 2022-07-11 at 22.18.36.png](https://cdn.hashnode.com/res/hashnode/image/upload/v1657567121788/Ni6cwn58e.png align="left")
+2. On each challenge you'll need to click "Get a New Instance." You'll need to approve the popup on your MetaMask and pay a transaction fee.  This button will deploy a smart contract. * You will not become the owner of the smart contract, instead an Ethernout account will. 
 
 3. Open the Google Developer Tools Console. This is how to interact with the smart contract. 
 
