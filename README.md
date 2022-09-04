@@ -337,17 +337,17 @@ contract TelephoneHack {
 
 ### 5. Token 
 
+*Please note: This challenge can probably be deprecated but its good knowledge so I've left it here. It's about arithmetic overflow vulnerabilities and starting from Solidity versions 0.8 the compiler throws an error for arithmetic overflows/underflows, handling the error cause before. Before 0.8 version solidity would not give an error. Now the complier automatically solves for such errors if you are using version 0.8. or above* 
+
 > You are given 20 tokens to start with and you will beat the level if you somehow manage to get your hands on any additional tokens. Preferably a very large amount of tokens.
 
 This challenge will show arithmetic underflow and overflows. It's important to use the correct mathematical operations so that you're not vulnerable to this type of attack. 
 
-Let's start by covering some terms and looking at the smart contract.
-- Odometer: shows you how many miles you have travelled. 
-(ADD IMAGES)
-- Arithmetic Overflow: Adding an additional number to the current space.
-- Arithmetic Underflow 
-- Uint: unsigned integer 256. 
-- SafeMath Library: its the safe way to perform aritmetic operations that prevents the overflow/underflow errors. 
+Let's cover some key concepts that we will need for the challenge:
+- [Uint](https://docs.soliditylang.org/en/v0.8.10/types.html): A uint is an unsigned integer in solidity. When you declare an integer as uint it is short for uint256. 
+- **Arithmetic Overflow:** calculation that exceeds the memory space. Basically, you will not have enough memory space to store the new calculation, so the number stored will be a smaller integer because it resets the bits. This means that you add 1 to a number and you will get a **smaller number as a result**. 
+- **Arithmetic Underflow:** The opposite of an overflow. mathematical operation results in an integer that is smaller than what can be stored. You end up with a number that is larger than the number that you started with. For example you think that when you subtract 1 from 0 you would get a negative number but you get a **larger number as a result**. 
+- [SafeMath by OpenZepplin](https://docs.openzeppelin.com/contracts/2.x/api/math): It's a library for Solidity’s arithmetic operations to check for overflows. It's a seperate package that you can use in your code. 
 
 ```solidity
 // SPDX-License-Identifier: MIT
